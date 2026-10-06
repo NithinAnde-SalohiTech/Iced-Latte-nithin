@@ -18,13 +18,12 @@ pipeline {
                     branch: 'development'
             }
         }
-
-        stage('Validate') {
+        stage('Build') {
             steps {
-                sh 'mvn validate'
+                sh 'mvn spotless:apply'
+                sh 'mvn clean package -DskipTests'
             }
         }
-
         stage('Sonar Scan') {
             steps {
                 withCredentials([
