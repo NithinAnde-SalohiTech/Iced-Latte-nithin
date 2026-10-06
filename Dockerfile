@@ -90,12 +90,13 @@ ENV SPRING_PROFILES_ACTIVE=dev \
 
 # Application layers
 # These paths come from Spring Boot 4's current layer extraction layout.
-COPY --link --from=extract --chown=app:app /app/app/dependencies/ ./
-COPY --link --from=extract --chown=app:app /app/app/spring-boot-loader/ ./
-COPY --link --from=extract --chown=app:app /app/app/snapshot-dependencies/ ./
-COPY --link --from=extract --chown=app:app /app/app/application/ ./
+COPY --link --from=extract /app/app/dependencies/ ./
+COPY --link --from=extract /app/app/spring-boot-loader/ ./
+COPY --link --from=extract /app/app/snapshot-dependencies/ ./
+COPY --link --from=extract /app/app/application/ ./
 
-# Runtime identity
+RUN chown -R app:app /app
+
 USER app
 
 # Startup command
