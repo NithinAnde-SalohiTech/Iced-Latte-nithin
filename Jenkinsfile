@@ -89,11 +89,22 @@ pipeline {
                             "$SSH_USER@$APP_EC2_IP" \
                             "
                                 docker pull nithinandedocker/iced-latte:latest
+                                docker network create iced-network 2>/dev/null || true
+                                docker rm -f redis 2>/dev/null || true
+
+                                docker run -d \
+                                    --name redis \
+                                    --network iced-network \
+                                    redis:7
+
                                 docker rm -f iced-latte 2>/dev/null || true
-                                docker run \
-                                    --name iced-latte \
-                                    -p 8080:8080 \
-                                    nithinandedocker/iced-latte:latest
+                                docker run -d \
+                                  --name iced-latte \
+                                  --network iced-network \
+                                  -p 8080:8080 \
+                                  -e REDIS_HOST=redis \
+                                  -e REDIS_PORT=6379 \
+                                  nithinandedocker/iced-latte:latest
                             "
                     '''
                 }
