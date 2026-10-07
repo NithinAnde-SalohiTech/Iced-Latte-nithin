@@ -88,10 +88,9 @@ pipeline {
                             -i "$SSH_KEY" \
                             "$SSH_USER@$APP_EC2_IP" \
                             "
-                                docker pull nithinandedocker/iced-latte:latest &&
-                                docker stop iced-latte || true &&
-                                docker rm iced-latte || true &&
-                                docker run -d \
+                                docker pull nithinandedocker/iced-latte:latest
+                                docker rm -f iced-latte 2>/dev/null || true
+                                docker run \
                                     --name iced-latte \
                                     -p 8080:8080 \
                                     nithinandedocker/iced-latte:latest
